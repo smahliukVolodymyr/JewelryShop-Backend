@@ -1,15 +1,19 @@
 import express from "express";
-import dotenv from "dotenv";
+import authRouter from "./routes/authRouter.js";
+import createConnection from "./dbConnection.js";
 import mainRouter from "./routes/index.js";
-
+import dotenv from "dotenv";
 dotenv.config();
+
+createConnection(); //creates connection to MongoDB Database
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
 
-app.use("/api/v1", mainRouter);
+// app.use("/auth", authRouter);
+app.use("/api/", mainRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
