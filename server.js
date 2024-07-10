@@ -3,6 +3,7 @@ import authRouter from "./routes/authRouter.js";
 import createConnection from "./dbConnection.js";
 import mainRouter from "./routes/index.js";
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config();
 
 createConnection(); //creates connection to MongoDB Database
@@ -10,6 +11,7 @@ createConnection(); //creates connection to MongoDB Database
 const PORT = process.env.PORT || 3000;
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 // app.use("/auth", authRouter);

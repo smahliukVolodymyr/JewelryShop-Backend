@@ -41,7 +41,7 @@ class authController {
         roles: [userRole.value],
       });
       await user.save();
-      return res.json({ message: "New user was created" });
+      return res.json({ message: "New user was created!" });
     } catch (err) {
       console.log(err);
       res.status(400).json({ message: "Registration Error" });
