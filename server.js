@@ -1,5 +1,4 @@
 import express from "express";
-import authRouter from "./routes/authRouter.js";
 import createConnection from "./dbConnection.js";
 import mainRouter from "./routes/index.js";
 import dotenv from "dotenv";
