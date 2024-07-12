@@ -1,5 +1,5 @@
+import { validationResult } from "express-validator";
 import Material from "../models/Material.js";
-
 class MaterialsController {
   async addMaterial(req, res) {
     try {
@@ -20,8 +20,8 @@ class MaterialsController {
         name,
         pricePerGram,
       });
+      await newMaterial.save();
       res.json({ message: "Material was created" });
-      newMaterial.save();
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: "Error adding material" });
@@ -34,7 +34,7 @@ class MaterialsController {
       res.json(materials);
     } catch (e) {
       console.log(e);
-      res.status(500).json({ message: "Error getting materials" });
+      res.status(400).json({ message: "Error getting materials" });
     }
   }
 
@@ -42,13 +42,11 @@ class MaterialsController {
     try {
       const id = req.params.id;
 
-      await Material.findByIdAndDelete(id).then((updatedMaterial) => {
-        if (!updatedMaterial) {
-          res.status(400).json({ message: "Material not found" });
-        } else {
-          res.json({ message: updatedMaterial });
-        }
-      });
+      const deletedMaterial = await Material.findByIdAndDelete(id);
+      if (!deletedMaterial) {
+        return res.status(400).json({ message: "Material not found" });
+      }
+      res.json(deletedMaterial);
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: "Error deleting material" });
@@ -63,18 +61,17 @@ class MaterialsController {
           .status(500)
           .json({ message: "Error editing material: ", errors });
       }
-      const { _id, name, pricePerGram } = req.body;
-      await Material.findByIdAndUpdate(
-        _id,
+      const { name, pricePerGram } = req.body;
+      const updatedMaterial = await Material.findOneAndUpdate(
+        { name },
         { name, pricePerGram },
         { new: true }
-      ).then((updatedMaterial) => {
-        if (!updatedMaterial) {
-          res.status(400).json({ message: "Material not found" });
-        } else {
-          res.json({ message: updatedMaterial });
-        }
-      });
+      );
+
+      if (!updatedMaterial) {
+        return res.status(400).json({ message: "Material not found" });
+      }
+      res.json(updatedMaterial);
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: "Error editing material" });

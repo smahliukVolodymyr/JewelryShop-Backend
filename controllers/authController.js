@@ -67,13 +67,13 @@ class authController {
     }
   }
 
-  async getUsers(req, res) {
+  async getUsers(_, res) {
     try {
       const users = await User.find({});
       res.json(users);
     } catch (err) {
       console.log(err);
-      res.status(500).json({ message: "Error getting users" });
+      res.status(400).json({ message: "Error getting users" });
     }
   }
 }

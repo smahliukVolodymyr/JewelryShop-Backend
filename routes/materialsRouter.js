@@ -1,25 +1,24 @@
 import { Router } from "express";
 import materialsController from "../controllers/materialsController.js";
-import { check } from "express-validator";
+import checkMaterialUsage from "../middleware/checkMaterialUsage.js";
+import materialsValidationMiddleware from "../middleware/materialsValidationMiddleware.js";
 
 const router = new Router();
 
 router.get("/get", materialsController.getMaterials);
 router.post(
   "/add",
-  [
-    check("name", "Material name cannot be empty").notEmpty(),
-    check("priceForGram", "Price for gram cannot be empty").notEmpty(),
-  ],
+  materialsValidationMiddleware,
   materialsController.addMaterial
 );
-router.delete("/delete/:id", materialsController.deleteMaterial);
+router.delete(
+  "/delete/:id",
+  checkMaterialUsage,
+  materialsController.deleteMaterial
+);
 router.put(
-  "/modify",
-  [
-    check("name", "Material name cannot be empty").notEmpty(),
-    check("priceForGram", "Price for gram cannot be empty").notEmpty(),
-  ],
+  "/edit",
+  materialsValidationMiddleware,
   materialsController.editMaterial
 );
 

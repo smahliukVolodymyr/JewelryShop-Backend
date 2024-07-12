@@ -1,37 +1,25 @@
 import mongoose, { Schema, model } from "mongoose";
-import Sales from "./Sales.js";
 
 const ProductSchema = new Schema({
-  name: { type: String, unique: true, required: true },
+  name: { type: String, required: true },
   type: {
     type: String,
     enum: [
-      "Сережки",
-      "Браслети",
-      "Кільця",
-      "Ланцюжки",
-      "Намиста",
-      "Персні",
-      "Брошки",
-      "Підвіски",
+      "Earrings",
+      "Bracelets",
+      "Rings",
+      "Chains",
+      "Necklaces",
+      "Brooches",
+      "Pendants",
     ],
     required: true,
   },
   materials: [
     { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Material" },
   ],
-  price: { type: String, required: true },
-});
-
-ProductSchema.pre("remove", async function (next) {
-  console.log("You are trying to delete product. It is used in sales.");
-  const productId = this._id;
-  const saleUsingProduct = await Sales.find({ product: productId });
-
-  if (saleUsingProduct > 0) {
-    throw new Error("Cannot delete product. It is used in sales.");
-  }
-  next();
+  weight: { type: Number, required: true },
+  price: { type: Number, required: true },
 });
 
 export default model("Product", ProductSchema);
