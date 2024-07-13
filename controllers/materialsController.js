@@ -61,9 +61,9 @@ class MaterialsController {
           .status(500)
           .json({ message: "Error editing material: ", errors });
       }
-      const { name, pricePerGram } = req.body;
-      const updatedMaterial = await Material.findOneAndUpdate(
-        { name },
+      const { _id, name, pricePerGram } = req.body;
+      const updatedMaterial = await Material.findByIdAndUpdate(
+        _id,
         { name, pricePerGram },
         { new: true }
       );
