@@ -6,7 +6,7 @@ class ProductsController {
     try {
       const allProducts = await Product.find({}).populate({
         path: "materials",
-        select: "-_id name",
+        select: " name",
         strictPopulate: false,
       });
       if (!allProducts.length) {

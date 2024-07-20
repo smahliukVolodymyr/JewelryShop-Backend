@@ -15,7 +15,7 @@ const genereteAccessToken = (id, roles) => {
     id,
     roles,
   };
-  return sign(payload, secretKey, { expiresIn: "24h" });
+  return sign(payload, secretKey, { expiresIn: "8h" });
 };
 
 class authController {
@@ -53,11 +53,11 @@ class authController {
       const { username, password } = req.body;
       const user = await User.findOne({ username });
       if (!user) {
-        return status(400).json({ message: `User ${username} not found` });
+        return res.status(400).json({ message: `User ${username} not found` });
       }
       const validPassword = bcrypt.compareSync(password, user.password);
       if (!validPassword) {
-        return status(400).json({ message: `Incorrect password` });
+        return res.status(400).json({ message: `Incorrect password` });
       }
       const token = genereteAccessToken(user._id, user.roles);
       return res.json({ token });

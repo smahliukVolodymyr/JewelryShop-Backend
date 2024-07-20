@@ -1,6 +1,6 @@
 import { Router } from "express";
 import materialsController from "../controllers/materialsController.js";
-import checkMaterialUsage from "../middleware/checkMaterialUsage.js";
+import checkMaterialUsage from "../middleware/checkMaterialUsageMiddleware.js";
 import materialsValidationMiddleware from "../middleware/materialsValidationMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
 

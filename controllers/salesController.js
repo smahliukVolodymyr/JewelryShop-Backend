@@ -6,13 +6,8 @@ class SalesControler {
     try {
       const salesData = await Sales.find({}).populate({
         path: "product",
-        select: "name weight materials",
+        select: "name",
         strictPopulate: false,
-        populate: {
-          path: "materials",
-          select: "name -_id",
-          strictPopulate: false,
-        },
       });
 
       if (!salesData.length) {

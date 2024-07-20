@@ -1,7 +1,7 @@
 import Product from "../models/Product.js";
 import Sales from "../models/Sales.js";
 
-async function countFinalPrice(req, _, next) {
+async function countFinalPrice(req, res, next) {
   try {
     const { product, buyerLastName, buyerFirstName, buyerMiddleName } =
       req.body;
