@@ -4,18 +4,15 @@ import Product from "../models/Product.js";
 class ProductsController {
   async getAllProducts(_, res) {
     try {
-      const allProducts = await Product.find({}).populate({
+      const allProducts = await Product.find({}, "-__v").populate({
         path: "materials",
         select: " name",
         strictPopulate: false,
       });
-      if (!allProducts.length) {
-        return res.status(400).json({ message: "There are no products" });
-      }
       res.json(allProducts);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error getting products" });
+      res.status(500).json({ message: "Error getting products" });
     }
   }
   async addProduct(req, res) {
@@ -23,15 +20,15 @@ class ProductsController {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res
-          .status(500)
-          .json({ message: "Error adding material: ", errors });
+          .status(400)
+          .json({ message: "Error adding product: ", errors });
       }
       const { name, type, materials, price, weight } = req.body;
       const product = await Product.findOne({ name, type });
       if (product) {
         return res
-          .status(500)
-          .json({ message: `Product ${name} with ${type} already exists` });
+          .status(400)
+          .json({ message: `Product ${name} of type ${type} already exists` });
       }
       const newProduct = new Product({ name, type, materials, weight, price });
 
@@ -39,7 +36,7 @@ class ProductsController {
       res.json({ message: "Product was created" });
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error creating product" });
+      res.status(500).json({ message: "Error creating product" });
     }
   }
   async deleteProduct(req, res) {
@@ -53,7 +50,7 @@ class ProductsController {
       res.json(deletedProduct);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error deleting product" });
+      res.status(500).json({ message: "Error deleting product" });
     }
   }
   async modifyProduct(req, res) {
@@ -61,8 +58,8 @@ class ProductsController {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res
-          .status(500)
-          .json({ message: "Error editing material: ", errors });
+          .status(400)
+          .json({ message: "Error editing product: ", errors });
       }
       const { _id, name, type, materials, price, weight } = req.body;
       const updatedProduct = await Product.findByIdAndUpdate(
@@ -77,12 +74,12 @@ class ProductsController {
         { new: true }
       );
       if (!updatedProduct) {
-        return res.status(500).json({ message: "Product not found" });
+        return res.status(400).json({ message: "Product not found" });
       }
       res.json(updatedProduct);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error editing product" });
+      res.status(500).json({ message: "Error editing product" });
     }
   }
 }

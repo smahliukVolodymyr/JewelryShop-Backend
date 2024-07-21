@@ -23,7 +23,7 @@ class authController {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(500).json({ message: "Registration error", errors });
+        return res.status(400).json({ message: "Registration error", errors });
       }
       const { username, password } = req.body;
       const candidate = await User.findOne({ username });
@@ -44,7 +44,7 @@ class authController {
       return res.json({ message: "New user was created!" });
     } catch (err) {
       console.log(err);
-      res.status(400).json({ message: "Registration Error" });
+      res.status(500).json({ message: "Registration Error" });
     }
   }
 
@@ -63,17 +63,17 @@ class authController {
       return res.json({ token });
     } catch (err) {
       console.log(err);
-      res.status(400).json({ message: "Login Error" });
+      res.status(500).json({ message: "Login Error" });
     }
   }
 
   async getUsers(_, res) {
     try {
-      const users = await User.find({});
+      const users = await User.find({}, " -__v ");
       res.json(users);
     } catch (err) {
       console.log(err);
-      res.status(400).json({ message: "Error getting users" });
+      res.status(500).json({ message: "Error getting users" });
     }
   }
 }

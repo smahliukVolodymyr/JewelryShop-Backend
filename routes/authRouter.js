@@ -10,7 +10,9 @@ router.post(
   validatiopnMiddleware,
   authController.registration
 );
+
 router.post("/login", authController.login);
+
 router.get("/users", roleMiddleware(["ADMIN"]), authController.getUsers);
 
 export default router;

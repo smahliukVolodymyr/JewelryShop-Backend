@@ -6,7 +6,7 @@ class MaterialsController {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res
-          .status(500)
+          .status(400)
           .json({ message: "Error adding material: ", errors });
       }
       const { name, pricePerGram } = req.body;
@@ -24,7 +24,7 @@ class MaterialsController {
       res.json({ message: "Material was created" });
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error adding material" });
+      res.status(500).json({ message: "Error adding material" });
     }
   }
 
@@ -34,7 +34,7 @@ class MaterialsController {
       res.json(materials);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error getting materials" });
+      res.status(500).json({ message: "Error getting materials" });
     }
   }
 
@@ -49,7 +49,7 @@ class MaterialsController {
       res.json(deletedMaterial);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error deleting material" });
+      res.status(500).json({ message: "Error deleting material" });
     }
   }
 
@@ -58,7 +58,7 @@ class MaterialsController {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res
-          .status(500)
+          .status(400)
           .json({ message: "Error editing material: ", errors });
       }
       const { _id, name, pricePerGram } = req.body;
@@ -71,10 +71,11 @@ class MaterialsController {
       if (!updatedMaterial) {
         return res.status(400).json({ message: "Material not found" });
       }
+
       res.json(updatedMaterial);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error editing material" });
+      res.status(500).json({ message: "Error editing material" });
     }
   }
 }

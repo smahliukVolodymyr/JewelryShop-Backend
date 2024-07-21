@@ -4,19 +4,16 @@ import Sales from "../models/Sales.js";
 class SalesControler {
   async getSales(_, res) {
     try {
-      const salesData = await Sales.find({}).populate({
+      const salesData = await Sales.find({}, "-__v").populate({
         path: "product",
         select: "name",
         strictPopulate: false,
       });
 
-      if (!salesData.length) {
-        return res.status(400).json({ message: "There are no sales" });
-      }
       res.json(salesData);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error getting sales data" });
+      res.status(500).json({ message: "Error getting sales data" });
     }
   }
   async addSales(req, res) {
@@ -24,8 +21,8 @@ class SalesControler {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res
-          .status(500)
-          .json({ message: "Error adding material: ", errors });
+          .status(400)
+          .json({ message: "Error adding sales: ", errors });
       }
 
       const {
@@ -41,7 +38,7 @@ class SalesControler {
       });
       if (salesItem) {
         return res
-          .status(500)
+          .status(400)
           .json({ message: `Sales item with this product already exists` });
       }
       const newSalesItem = new Sales({
@@ -56,7 +53,7 @@ class SalesControler {
       res.json({ message: "Sales item was created" });
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error creating product" });
+      res.status(500).json({ message: "Error creating sale item" });
     }
   }
   async deleteSalesItem(req, res) {
@@ -70,7 +67,7 @@ class SalesControler {
       res.json(deletedSalesItem);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error deleting sales item" });
+      res.status(500).json({ message: "Error deleting sales item" });
     }
   }
   async modifySalesItem(req, res) {
@@ -78,8 +75,8 @@ class SalesControler {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res
-          .status(500)
-          .json({ message: "Error adding material: ", errors });
+          .status(400)
+          .json({ message: "Error editing sales: ", errors });
       }
 
       const {
@@ -105,12 +102,12 @@ class SalesControler {
         { new: true }
       );
       if (!updatedSalesItem) {
-        return res.status(500).json({ message: "Sales item not found" });
+        return res.status(400).json({ message: "Sales item not found" });
       }
       res.json(updatedSalesItem);
     } catch (e) {
       console.log(e);
-      res.status(400).json({ message: "Error editing sales item" });
+      res.status(500).json({ message: "Error editing sales item" });
     }
   }
 }
