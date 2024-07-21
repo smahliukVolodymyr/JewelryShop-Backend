@@ -4,7 +4,7 @@ import Product from "../models/Product.js";
 class ProductsController {
   async getAllProducts(_, res) {
     try {
-      const allProducts = await Product.find({}, "-__v").populate({
+      const allProducts = await Product.find({}).populate({
         path: "materials",
         select: " name",
         strictPopulate: false,

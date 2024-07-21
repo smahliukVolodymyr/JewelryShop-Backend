@@ -4,7 +4,7 @@ import Sales from "../models/Sales.js";
 class SalesControler {
   async getSales(_, res) {
     try {
-      const salesData = await Sales.find({}, "-__v").populate({
+      const salesData = await Sales.find({}).populate({
         path: "product",
         select: "name",
         strictPopulate: false,

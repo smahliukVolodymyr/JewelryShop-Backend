@@ -69,7 +69,7 @@ class authController {
 
   async getUsers(_, res) {
     try {
-      const users = await User.find({}, " -__v ");
+      const users = await User.find({});
       res.json(users);
     } catch (err) {
       console.log(err);
