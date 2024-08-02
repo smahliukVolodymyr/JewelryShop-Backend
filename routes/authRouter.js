@@ -1,15 +1,11 @@
 import { Router } from "express";
 import authController from "../controllers/authController.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
-import validatiopnMiddleware from "../middleware/authValidationMIddleware.js";
+import { authValidation } from "../middleware/validationMiddleware.js";
 
 const router = new Router();
 
-router.post(
-  "/registration",
-  validatiopnMiddleware,
-  authController.registration
-);
+router.post("/registration", authValidation, authController.registration);
 
 router.post("/login", authController.login);
 

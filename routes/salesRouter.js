@@ -1,28 +1,28 @@
 import { Router } from "express";
 import salesController from "../controllers/salesController.js";
-import validatiopnMiddleware from "../middleware/salesValidationMiddleware.js";
 import countFinalPrice from "../middleware/countFinalPriceMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
 
+import { salesValidation } from "../middleware/validationMiddleware.js";
 const router = new Router();
 
-router.get("/get", roleMiddleware(["USER", "ADMIN"]), salesController.getSales);
+router.get("", roleMiddleware(["USER", "ADMIN"]), salesController.getSales);
 router.post(
-  "/add",
+  "",
   roleMiddleware(["USER", "ADMIN"]),
-  validatiopnMiddleware,
+  salesValidation,
   countFinalPrice,
   salesController.addSales
 );
 router.delete(
-  "/delete/:id",
+  "/:id",
   roleMiddleware(["USER", "ADMIN"]),
   salesController.deleteSalesItem
 );
 router.put(
-  "/edit",
+  "",
   roleMiddleware(["USER", "ADMIN"]),
-  validatiopnMiddleware,
+  salesValidation,
   salesController.modifySalesItem
 );
 
